@@ -23,3 +23,9 @@
     width: 30px;
     border: 1px solid black;
 }
+
+#player-board .ship, #enemy-board .ship.hit {
+    color: red;
+    background-color: rgb(97, 97, 97);
+}
+

@@ -12,8 +12,7 @@ const player = (name, brain) => {
             x = Math.floor(Math.random()*10);
             y = Math.floor(Math.random()*10);
             validHit = gameboard.receiveAttack(x, y);
-        }
-        
+        }   
     }
 
     return { takeTurn, name, brain, takeRandomTurn }

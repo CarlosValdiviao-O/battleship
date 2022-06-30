@@ -12,10 +12,11 @@ const startGame = () => {
     let boards = [p1Gameboard, p2Gameboard];
     let currentP = 0;
     let currentB = 1;
-    p1Gameboard.placeShip(0, 0, 'right', 4);
-    p1Gameboard.placeShip(9, 0, 'down', 3);
-    p2Gameboard.placeShip(0, 0, 'right', 4);
-    p2Gameboard.placeShip(9, 0, 'down', 3);
+    p1Gameboard.placeShipsRandomly();
+    playerBoard.updateShips(p1Gameboard);
+
+    p2Gameboard.placeShipsRandomly();
+    enemyBoard.updateShips(p2Gameboard);
 
     let button = document.getElementById('button');
     button.addEventListener('click', handleTurn);  

@@ -7,7 +7,7 @@ const gameboard = () => {
     for (let i = 0 ; i < 10 ; i++){
         cells[i] = [];
         for (let j = 0 ; j < 10 ; j++){
-            cells[i][j] = {hit: false, ship: ''};
+            cells[i][j] = {hit: false, ship: -2};
         }
     }
 
@@ -70,7 +70,7 @@ const gameboard = () => {
         if (orientation == 'down' && y+length > 9) return true;
         if (orientation == 'right' && x+length > 9) return true;
         for (let i = 0; i < length ; i++) {
-            if(cells[x][y].ship != '') return true;
+            if(cells[x][y].ship > -2) return true;
             if (orientation == 'down') y++;
             else x++;
         }
@@ -112,7 +112,25 @@ const gameboard = () => {
         return true;
     }
 
-    return { placeShip, cells, receiveAttack, ships, areAllSunk }
+    function placeShipsRandomly () {
+        const shipLengths = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2];
+        for (let i = 0; i < shipLengths.length; i++) {
+            while (ships.length <= i) {
+                let x = Math.floor(Math.random()*10);
+                let y = Math.floor(Math.random()*10);
+                let orientation = pickRandomOrientation();
+                placeShip(x, y, orientation, shipLengths[i])
+            }
+        }
+    }
+
+    function pickRandomOrientation () {
+        let aux = Math.floor(Math.random()*2);
+        if (aux == 1) return 'right';
+        else return 'down';
+    }
+
+    return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly }
 }
 
 export { gameboard }

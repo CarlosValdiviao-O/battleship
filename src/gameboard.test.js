@@ -8,7 +8,7 @@ describe('Gameboard tests', () => {
     for (let i = 0 ; i < 10 ; i++){
         arr[i] = [];
         for (let j = 0 ; j < 10 ; j++){
-            arr[i][j] = {hit: false, ship: ''};;
+            arr[i][j] = {hit: false, ship: -2};;
         }
     }
    

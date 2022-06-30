@@ -19,14 +19,24 @@ const createBoard = (board, enemy) => {
         for (let i = 0; i < 10 ; i++) {
             for (let j = 0; j < 10; j++) {
                 if (board.cells[i][j].hit == true) {
-                    //console.log(cells[i][j]);
+                    cells[i][j].classList.add('hit');
                     cells[i][j].textContent = 'x';
                 }
             }
         }      
     }
+
+    function updateShips (board) {
+        for (let i = 0; i < 10 ; i++) {
+            for (let j = 0; j < 10; j++) {
+                if (board.cells[i][j].ship > -1) {
+                    cells[i][j].classList.add('ship');
+                }
+            }
+        }
+    }
     
-    return { updateHits }
+    return { updateHits, updateShips }
 }
 
 export { createBoard }

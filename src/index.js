@@ -11,3 +11,10 @@ let game = startGame();
 
 
 export { game, playerBoard, enemyBoard }
+
+
+//add settings module
+//add messages module
+//add drag and drope for placement ships
+//add computer smart play
+//add two player mode
