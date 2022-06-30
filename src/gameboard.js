@@ -1,0 +1,119 @@
+import { ship } from "./ships";
+
+const gameboard = () => {
+    let cells = [];
+    let ships = [];
+
+    for (let i = 0 ; i < 10 ; i++){
+        cells[i] = [];
+        for (let j = 0 ; j < 10 ; j++){
+            cells[i][j] = {hit: false, ship: ''};
+        }
+    }
+
+    function placeShip(x, y, orientation, length) {
+        let invalidCoord = false;
+        invalidCoord = checkValidCoordinates(x, y, orientation, length);
+        if (invalidCoord == true) return;
+        let newShip = ship(length);
+        ships.push(newShip);
+        newShip.coordinates = [];
+        newShip.nextToCoord = [];
+        let auxX = x;
+        let auxY = y;
+
+        for (let i = 0; i < length ; i++) {
+            cells[x][y].ship = i;
+            newShip.coordinates[i] = [x, y];
+            if (orientation == 'down') y++;
+            else x++;
+        }
+        // fill adjacent cells with -1
+        for (let i = 0; i < length + 2; i++) {
+           
+            if (orientation == 'down') {
+                if(checkValidAuxCoord(auxX-1, auxY-1)){
+                   cells[auxX-1][auxY-1].ship = -1; 
+                   newShip.nextToCoord.push([auxX-1, auxY-1]);
+                } 
+                if(checkValidAuxCoord(auxX+1, auxY-1)){
+                   cells[auxX+1][auxY-1].ship = -1; 
+                   newShip.nextToCoord.push([auxX+1, auxY-1]);
+                } 
+                if(checkValidAuxCoord(auxX, auxY-1) && i == 0 || checkValidAuxCoord(auxX, auxY-1) && i == length+1){
+                   cells[auxX][auxY-1].ship = -1; 
+                   newShip.nextToCoord.push([auxX, auxY-1]);
+                } 
+            }
+            else {
+                if(checkValidAuxCoord(auxX-1, auxY-1)){
+                   cells[auxX-1][auxY-1].ship = -1; 
+                   newShip.nextToCoord.push([auxX-1, auxY-1]);
+                } 
+                if(checkValidAuxCoord(auxX-1, auxY+1)){
+                   cells[auxX-1][auxY+1].ship = -1; 
+                   newShip.nextToCoord.push([auxX-1, auxY+1]);
+                } 
+                if(checkValidAuxCoord(auxX-1, auxY) && i == 0 || checkValidAuxCoord(auxX-1, auxY) && i == length+1){
+                   cells[auxX-1][auxY].ship = -1; 
+                   newShip.nextToCoord.push([auxX-1, auxY]);
+                }  
+            }
+            
+            if (orientation == 'down') auxY++;
+            else auxX++;
+        }
+    }
+
+    function checkValidCoordinates(x, y, orientation, length) {
+        if (x > 9 || x < 0 || y > 9 || y < 0) return true;
+        if (orientation == 'down' && y+length > 9) return true;
+        if (orientation == 'right' && x+length > 9) return true;
+        for (let i = 0; i < length ; i++) {
+            if(cells[x][y].ship != '') return true;
+            if (orientation == 'down') y++;
+            else x++;
+        }
+        return false;
+    }
+
+    function checkValidAuxCoord (x, y) {
+        if (x > 9 || x < 0 || y > 9 || y < 0) return false;
+        else return true;    
+    }
+
+    function receiveAttack (x, y) {
+        if (cells[x][y].hit == true) return false;
+        cells[x][y].hit = true;
+        for (let i = 0; i < ships.length; i++) {
+            for (let j = 0; j < ships[i].coordinates.length; j++) {
+                if (ships[i].coordinates[j][0] == x && ships[i].coordinates[j][1] == y) {
+                    ships[i].hit(cells[x][y].ship);
+                    markAdjacentCells(ships[i]);
+                    break;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    function markAdjacentCells(ship) {
+        if (!ship.isSunk()) return;
+        for (let i = 0; i < ship.nextToCoord.length; i++) {
+            cells[ship.nextToCoord[i][0]][ship.nextToCoord[i][1]].hit = true;
+        }
+    }
+
+    function areAllSunk() {
+        for (let i = 0; i < ships.length; i++) {
+            if (!ships[i].isSunk()) return false;
+        }
+        return true;
+    }
+
+    return { placeShip, cells, receiveAttack, ships, areAllSunk }
+}
+
+export { gameboard }
+
