@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#player-board, #enemy-board {
+    display: flex;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+}
+
+.cell {
+    height: 30px;
+    width: 30px;
+    border: 1px solid black;
+}
