@@ -18,9 +18,6 @@ const startGame = () => {
     p2Gameboard.placeShipsRandomly();
     enemyBoard.updateShips(p2Gameboard);
 
-    let button = document.getElementById('button');
-    button.addEventListener('click', handleTurn);  
-
     function handleTurn(x, y) {
         if (over) return;
         if (players[currentP].brain == 'human') {

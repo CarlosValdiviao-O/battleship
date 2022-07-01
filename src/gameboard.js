@@ -4,10 +4,14 @@ const gameboard = () => {
     let cells = [];
     let ships = [];
 
-    for (let i = 0 ; i < 10 ; i++){
-        cells[i] = [];
-        for (let j = 0 ; j < 10 ; j++){
-            cells[i][j] = {hit: false, ship: -2};
+    clearBoard();
+
+    function clearBoard () {
+        for (let i = 0 ; i < 10 ; i++){
+            cells[i] = [];
+            for (let j = 0 ; j < 10 ; j++){
+                cells[i][j] = {hit: false, ship: -2};
+            }
         }
     }
 
@@ -114,20 +118,56 @@ const gameboard = () => {
 
     function placeShipsRandomly () {
         const shipLengths = [5, 4, 4, 3, 3, 3, 2, 2, 2, 2];
+        const missingShips = [];
         for (let i = 0; i < shipLengths.length; i++) {
-            while (ships.length <= i) {
+            let tries = 5 * (i+1);
+            while (ships.length + missingShips.length <= i && tries > 0) {
                 let x = Math.floor(Math.random()*10);
                 let y = Math.floor(Math.random()*10);
                 let orientation = pickRandomOrientation();
-                placeShip(x, y, orientation, shipLengths[i])
+                placeShip(x, y, orientation, shipLengths[i]);
+                tries--;
+                if (tries == 0 && ships.length + missingShips.length <= i) missingShips.push(shipLengths[i]);
             }
         }
+        console.log(missingShips);
+        console.log(ships);
+
+        if (missingShips.length > 0) solveMissingShips(missingShips);
     }
 
     function pickRandomOrientation () {
         let aux = Math.floor(Math.random()*2);
         if (aux == 1) return 'right';
         else return 'down';
+    }
+
+    function solveMissingShips (arr) {
+        let available = [];
+        let length = ships.length;
+        for (let i = 0 ; i < 10 ; i++){
+            for (let j = 0 ; j < 10 ; j++){
+                if (cells[i][j].ship == -2) available.push([i, j]);
+            }
+        }
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < available.length; j++) {
+                placeShip(available[j][0], available[j][1], 'right', arr[i]);
+                placeShip(available[j][0], available[j][1], 'down', arr[i]);
+                if (length < ships.length) {
+                    length = ships.length;
+                    break;
+                }
+            }
+        }
+
+        console.log(ships);
+
+        if (ships.length != 10) {
+            clearBoard(); 
+            ships = [];
+            placeShipsRandomly();
+        }
     }
 
     return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly }

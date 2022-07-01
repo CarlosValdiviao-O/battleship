@@ -32,6 +32,7 @@ const createBoard = (board, enemy) => {
                 if (board.cells[i][j].ship > -1) {
                     cells[i][j].classList.add('ship');
                 }
+                else  cells[i][j].classList.remove('ship');
             }
         }
     }

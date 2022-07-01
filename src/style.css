@@ -4,12 +4,12 @@
     box-sizing: border-box;
 }
 
-#boards {
+#boards, #setup {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-#player-board, #enemy-board {
+#player-board, #enemy-board, #placement-board {
     display: flex;
 }
 
@@ -24,8 +24,13 @@
     border: 1px solid black;
 }
 
-#player-board .ship, #enemy-board .ship.hit {
+/*#player-board .ship, #enemy-board .ship.hit, #setup .ship {
     color: red;
     background-color: rgb(97, 97, 97);
 }
+*/
 
+.ship {
+    color: red;
+    background-color: rgb(97, 97, 97);
+}
