@@ -98,7 +98,6 @@ const gameboard = () => {
                 }
             }
         }
-
         return true;
     }
 
@@ -130,8 +129,6 @@ const gameboard = () => {
                 if (tries == 0 && ships.length + missingShips.length <= i) missingShips.push(shipLengths[i]);
             }
         }
-        console.log(missingShips);
-        console.log(ships);
 
         if (missingShips.length > 0) solveMissingShips(missingShips);
     }
@@ -161,8 +158,6 @@ const gameboard = () => {
             }
         }
 
-        console.log(ships);
-
         if (ships.length != 10) {
             clearBoard(); 
             ships = [];
@@ -170,7 +165,31 @@ const gameboard = () => {
         }
     }
 
-    return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly }
+    function getShipIndex(x, y) {
+        if (cells[x][y].ship > -1) {
+            for (let i = 0; i < ships.length; i++) {
+                if(ships[i].coordinates[cells[x][y].ship]) {
+                    if (ships[i].coordinates[cells[x][y].ship][0] == x && ships[i].coordinates[cells[x][y].ship][1] == y) {
+                        return i;                     
+                    } 
+                }
+            }
+        }
+        return -1;
+    }
+
+    function killShip (x, y) {
+        let index = getShipIndex(x, y);
+        ships[index].coordinates.forEach(val => cells[val[0]][val[1]].ship = -2);
+        ships[index].nextToCoord.forEach(val => cells[val[0]][val[1]].ship = -2);
+        ships.splice(index, 1);
+        for (let i = 0; i < ships.length; i++) {
+            ships[i].nextToCoord.forEach(val => cells[val[0]][val[1]].ship = -1)
+        }
+    }
+
+    return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly,
+            killShip }
 }
 
 export { gameboard }

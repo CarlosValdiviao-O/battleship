@@ -9,8 +9,23 @@
     grid-template-columns: 1fr 1fr;
 }
 
-#player-board, #enemy-board, #placement-board {
+#player-board, #enemy-board, #placement-board, #setup .right, .ship-container {
     display: flex;
+    height: max-content;
+    width: max-content;
+}
+
+.ship-container p::before {
+    content: 'x';
+}
+
+.ship.moveable {
+    transform: translateX(-1px) translateY(-1px);
+    overflow: visible;
+}
+
+.drag-over.available {
+    background-color: rgb(0 0 0 / 40%);
 }
 
 .row {
@@ -24,13 +39,8 @@
     border: 1px solid black;
 }
 
-/*#player-board .ship, #enemy-board .ship.hit, #setup .ship {
+#player-board .ship, #enemy-board .ship.hit, #setup .ship {
     color: red;
     background-color: rgb(97, 97, 97);
 }
-*/
 
-.ship {
-    color: red;
-    background-color: rgb(97, 97, 97);
-}
