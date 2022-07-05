@@ -1,13 +1,12 @@
 import { gameboard } from "./gameboard";
 import { player } from "./player";
-import { playerBoard, enemyBoard } from ".";
+import { playerBoard, enemyBoard, p1Gameboard, p2Gameboard } from ".";
+
 
 const startGame = () => {
     let over = false;
     let p1 = player('carlos', 'human');
     let p2 = player('bot', 'ai');
-    let p1Gameboard = gameboard();
-    let p2Gameboard = gameboard();
     let players = [p1, p2];
     let boards = [p1Gameboard, p2Gameboard];
     let currentP = 0;
@@ -56,7 +55,12 @@ const startGame = () => {
         }
     }
     
-    return { handleTurn }
+    function reStart () {
+        playerBoard.updateShips(p1Gameboard);
+        enemyBoard.updateShips(p2Gameboard);
+    }
+    
+    return { handleTurn, reStart }
 }
 
 export { startGame }
