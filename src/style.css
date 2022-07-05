@@ -9,7 +9,7 @@
     grid-template-columns: 1fr 1fr;
 }
 
-#player-board, #enemy-board, #placement-board, #setup .right, .ship-container {
+#player-board, #enemy-board, #placement-board, #setup #drag-ships, .ship-container {
     display: flex;
     height: max-content;
     width: max-content;
@@ -26,6 +26,15 @@
 
 .drag-over.available {
     background-color: rgb(0 0 0 / 40%);
+}
+
+.ship.hide {
+    display: none;
+}
+
+.rotate {
+    display: flex;
+    width: max-content;
 }
 
 .row {

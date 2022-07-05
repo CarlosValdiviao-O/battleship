@@ -1,6 +1,6 @@
 import { addChildElement } from "./functions";
 import { game } from ".";
-import { placeShip, checkDrag, toggleDrag, saveVariables } from "./setup";
+import { placeShip, checkDrag, toggleDrag, saveVariables, solveOutOfBoundaries } from "./setup";
 
 const createBoard = (board, enemy) => {
     let cells = [];
@@ -79,15 +79,23 @@ const createBoard = (board, enemy) => {
     }
 
     function createShipDiv (i, j, orientation, length) {
+        console.log(1);
         let ship = addChildElement(cells[i][j], 'div', '.ship');
         ship.draggable = true;
         ship.classList.add('moveable');
         ship.addEventListener('dragstart', toggleDrag);
+        ship.addEventListener('dragstart', () => {
+            setTimeout(() => {
+                ship.classList.add('hide');
+            }, 0);
+        })
         ship.addEventListener('dragstart', () => saveVariables(5 - length, length, ship, i, j))
         ship.addEventListener('dragend', toggleDrag);
+        ship.addEventListener('dragend', solveOutOfBoundaries);
         for (let c = 0; c < length; c++) {
             let cell = addChildElement(ship, 'div', '.cell');
         }
+        if (orientation == 'right') ship.classList.add('rotate');
     }
     
     return { updateHits, updateShips, addDropEvents, createShipDiv }

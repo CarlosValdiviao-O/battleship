@@ -17,7 +17,7 @@ export { game, playerBoard, enemyBoard }
 
 //add settings module
 //add messages module
-//add drag and drope for placement ships
 //add computer smart play
 //add small delay for computer play
 //add two player mode
+//hide ship class in enemy board

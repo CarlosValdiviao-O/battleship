@@ -23,6 +23,7 @@ const gameboard = () => {
         ships.push(newShip);
         newShip.coordinates = [];
         newShip.nextToCoord = [];
+        newShip.direction = orientation;
         let auxX = x;
         let auxY = y;
 
@@ -71,8 +72,8 @@ const gameboard = () => {
 
     function checkValidCoordinates(x, y, orientation, length) {
         if (x > 9 || x < 0 || y > 9 || y < 0) return true;
-        if (orientation == 'down' && y+length > 9) return true;
-        if (orientation == 'right' && x+length > 9) return true;
+        if (orientation == 'down' && y+length > 10) return true;
+        if (orientation == 'right' && x+length > 10) return true;
         for (let i = 0; i < length ; i++) {
             if(cells[x][y].ship > -2) return true;
             if (orientation == 'down') y++;
@@ -188,8 +189,13 @@ const gameboard = () => {
         }
     }
 
+    function getShipOrientation (x, y) {
+        let index = getShipIndex(x, y);
+        return ships[index].direction;
+    }
+
     return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly,
-            killShip }
+            killShip, getShipOrientation }
 }
 
 export { gameboard }
