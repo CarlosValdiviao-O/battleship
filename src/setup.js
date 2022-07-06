@@ -16,6 +16,7 @@ let drag = false;
 let kill = false;
 let ps = [];
 let domShips = [];
+let cancel;
 
 function runSetup () {
     const left = addChildElement(container, 'div', '.left');
@@ -67,12 +68,16 @@ function runSetup () {
     const start = addChildElement(buttons, 'button');
     start.textContent = 'Start';
     start.addEventListener('click', newGame);
-}
 
+    cancel = addChildElement(container, 'button', '.hide');
+    cancel.textContent = 'x';
+    cancel.addEventListener('click', () => container.classList.toggle('hide'));
+}
+//checkpoint
 function placeShip (x, y) {
     if (placementBoard.ships.length >= 10) return;
     placementBoard.placeShip(x, y, orientation, length);
-    domBoard.updateShips(placementBoard);
+    domBoard.updateBoard(placementBoard, false, true);
     if(kill){
         dragItem.remove();
     }
@@ -106,7 +111,7 @@ function saveVariables(ind, len, dra, x, y) {
     dragItem = dra;
     orientation = placementBoard.getShipOrientation(x, y);
     placementBoard.killShip(x, y);
-    domBoard.updateShips(placementBoard);  
+    domBoard.updateBoard(placementBoard, false, true);  
     ps[index].textContent = +ps[index].textContent + 1; 
     remaining--;
     domShips[index].draggable = true; 
@@ -115,20 +120,22 @@ function saveVariables(ind, len, dra, x, y) {
 function pickRandom () {
     clearBoard();
     placementBoard.placeShipsRandomly();
-    domBoard.updateShips(placementBoard);
+    setTimeout(() => {
+        domBoard.updateBoard(placementBoard, false, true);
+        placementBoard.ships.forEach(ship => {
+            domBoard.createShipDiv(ship.coordinates[0][0], ship.coordinates[0][1], ship.direction, ship.coordinates.length);
+        });
+    }, 100);
     ps.forEach((p) => p.textContent = 0);
     domShips.forEach((ship) => ship.draggable = false);
-    remaining = 10;
-    placementBoard.ships.forEach(ship => {
-        domBoard.createShipDiv(ship.coordinates[0][0], ship.coordinates[0][1], ship.direction, ship.coordinates.length);
-    })
+    remaining = 10;  
 }
 
 function clearBoard() {
     placementBoard = gameboard();
     let ships = Array.from(document.getElementsByClassName('moveable'));
     ships.forEach(ship => ship.remove());
-    domBoard.updateShips(placementBoard, false);
+    domBoard.updateBoard(placementBoard, false, true);
     for (let i = 0; i < ps.length; i ++) ps[i].textContent = 4 - i;
     domShips.forEach(ship => ship.draggable = true);
     remaining = 0;
@@ -140,17 +147,29 @@ function rotateShips() {
 }
 
 function solveOutOfBoundaries () {
-    if (placementBoard.ships.length < remaining) remaining--;
+    if (placementBoard.ships.length < remaining) {
+        remaining--;
+    }
+    else dragItem.remove();
 }
 
 function newGame () {
     if (placementBoard.ships.length < 10) return;
     let computer = gameboard();
+    computer.placeShipsRandomly();
     setP1(placementBoard);
     setP2(computer);
     game.reStart();
-    //toggleSetup();
+    container.classList.toggle('hide');
 }
 
-export { runSetup, placeShip, checkDrag, toggleDrag, saveVariables, solveOutOfBoundaries }
+function displaySetup () {
+    container.classList.toggle('hide');
+    clearBoard();
+    cancel.classList.remove('hide');
+}
+
+
+export { runSetup, placeShip, checkDrag, toggleDrag, saveVariables,
+         solveOutOfBoundaries, displaySetup}
 

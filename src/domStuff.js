@@ -19,30 +19,32 @@ const createBoard = (board, enemy) => {
         }
     }
 
-    function updateHits (board) {
+    function updateBoard (board, enemy, setup) {
         for (let i = 0; i < 10 ; i++) {
             for (let j = 0; j < 10; j++) {
-                if (board.cells[i][j].hit == true) {
-                    cells[i][j].classList.add('hit');
-                    cells[i][j].textContent = 'x';
+                if (!setup) {
+                    if (board.cells[i][j].hit == true) {
+                        cells[i][j].classList.add('hit');
+                        cells[i][j].textContent = 'x';
+                    }
+                    else {
+                        cells[i][j].classList.remove('hit');
+                        cells[i][j].textContent = '';
+                    }
                 }
+                if (!enemy) {
+                    (board.cells[i][j].ship > -1) ? cells[i][j].classList.add('ship'):
+                        cells[i][j].classList.remove('ship');
+                    (board.cells[i][j].ship == -2) ? cells[i][j].classList.add('available'):
+                        cells[i][j].classList.remove('available');
+                } 
                 else {
-                    cells[i][j].classList.remove('hit');
-                    cells[i][j].textContent = '';
+                    (board.cells[i][j].ship > -1 && board.cells[i][j].hit == true) ? 
+                        cells[i][j].classList.add('ship'):
+                        cells[i][j].classList.remove('ship');
                 }
             }
         }      
-    }
-
-    function updateShips (board) {
-        for (let i = 0; i < 10 ; i++) {
-            for (let j = 0; j < 10; j++) {
-                if (board.cells[i][j].ship > -1) cells[i][j].classList.add('ship');
-                else  cells[i][j].classList.remove('ship');
-                if (board.cells[i][j].ship == -2) cells[i][j].classList.add('available');
-                else  cells[i][j].classList.remove('available');
-            }
-        }
     }
 
     function addDropEvents () {
@@ -79,7 +81,6 @@ const createBoard = (board, enemy) => {
     }
 
     function createShipDiv (i, j, orientation, length) {
-        console.log(1);
         let ship = addChildElement(cells[i][j], 'div', '.ship');
         ship.draggable = true;
         ship.classList.add('moveable');
@@ -98,7 +99,42 @@ const createBoard = (board, enemy) => {
         if (orientation == 'right') ship.classList.add('rotate');
     }
     
-    return { updateHits, updateShips, addDropEvents, createShipDiv }
+    return { updateBoard, addDropEvents, createShipDiv }
 }
 
-export { createBoard }
+const createAliveShips = (div) => {
+    let ps = [];
+    let ships = [];
+    let lenghts = [5, 4, 3, 2];
+    for (let i = 0; i < 4; i++) {
+        let container = addChildElement(div, 'div', '.small');
+        let p = addChildElement(container, 'p');
+        p.textContent = i + 1;
+        ps.push(p);
+        let ship = addChildElement(container, 'div', '.ship');
+        ship.classList.add('rotate');
+        for (let j = 0; j < 5 - i; j++) {
+            let cell = addChildElement(ship, 'div', '.cell');
+        }
+        ships.push(ship);
+    }
+
+    function updateShips (board) {
+        ps.forEach(p => p.textContent = 0);
+        ships.forEach(ship => ship.classList.add('sunk'));
+        board.ships.forEach(ship => {
+            if (!ship.isSunk()) {
+                let index;
+                for (let i = 0; i < lenghts.length; i++) {
+                    if (lenghts[i] == ship.cells.length) index = i;
+                }
+                ps[index].textContent = +ps[index].textContent + 1;
+                ships[index].classList.remove('sunk'); 
+            }
+        })
+    }
+
+    return { updateShips }
+}
+
+export { createBoard, createAliveShips }

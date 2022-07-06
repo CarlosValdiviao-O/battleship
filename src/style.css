@@ -15,7 +15,7 @@
     width: max-content;
 }
 
-.ship-container p::before {
+.ship-container p::before, .small p::before {
     content: 'x';
 }
 
@@ -28,7 +28,7 @@
     background-color: rgb(0 0 0 / 40%);
 }
 
-.ship.hide {
+.ship.hide, #setup.hide, #setup .hide {
     display: none;
 }
 
@@ -48,8 +48,30 @@
     border: 1px solid black;
 }
 
-#player-board .ship, #enemy-board .ship.hit, #setup .ship {
+#player-board .ship, #enemy-board .ship.hit, #setup .ship, .ships .ship {
     color: red;
     background-color: rgb(97, 97, 97);
+}
+
+.small {
+    display: flex;
+    align-items: center;
+}
+
+.small .cell {
+    width: 15px;
+    height: 15px;
+}
+
+
+.ships {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ship.sunk .cell {
+    background-color: rgb(148, 148, 148);
+    border: 1px solid rgb(100, 100, 100);
 }
 
