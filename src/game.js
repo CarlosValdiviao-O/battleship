@@ -1,8 +1,8 @@
 import { updateMessage } from "./hud"
 import { playerBoard, enemyBoard, p1Gameboard, p2Gameboard, enemyShips, playerShips,
         p1, p2, pvp } from ".";
+import { showPassingScreen } from "./domStuff";
 
-//checkpoint
 const startGame = () => {
     let over = false;
     let players = [p1, p2];
@@ -23,25 +23,39 @@ const startGame = () => {
                 enemyShips.updateShips(boards[currentB]);
                 enemyBoard.updateBoard(boards[currentB], true, false);
                 over = checkWinner();
-                changeTurns();
-                updateMessage(currentP);
+                
                 if (pvp == true) {
                     players = [p1, p2];
-                    playerShips.updateShips(boards[currentP]);
-                    playerBoard.updateBoard(boards[currentP], false, false);
-                    enemyShips.updateShips(boards[currentB]);
-                    enemyBoard.updateBoard(boards[currentB], true, false);
+                    enemyBoard.toggleClickEvents();
+                    setTimeout(() => { 
+                        changeTurns();
+                        showPassingScreen(currentP);
+                        updateMessage(currentP);
+                        playerShips.updateShips(boards[currentP]);
+                        playerBoard.updateBoard(boards[currentP], false, false);
+                        enemyShips.updateShips(boards[currentB]);
+                        enemyBoard.updateBoard(boards[currentB], true, false);
+                        enemyBoard.toggleClickEvents();
+                    }, 1000)
                 }
-                if (players[currentP].brain == 'ai') handleTurn();
+                else {
+                    changeTurns();
+                    updateMessage(currentP);
+                    handleTurn();
+                } 
             }
         }
         else {
-            players[currentP].takeRandomTurn(boards[currentB]);
-            playerShips.updateShips(boards[currentB]);
-            playerBoard.updateBoard(boards[currentB], false, false);
-            over = checkWinner();
-            changeTurns();
-            updateMessage(currentP);
+            enemyBoard.toggleClickEvents();
+            setTimeout(() => {
+                players[currentP].takeComputerTurn(boards[currentB]);
+                playerShips.updateShips(boards[currentB]);
+                playerBoard.updateBoard(boards[currentB], false, false);
+                over = checkWinner();
+                changeTurns();
+                updateMessage(currentP);
+                enemyBoard.toggleClickEvents();
+            }, 1000)
         }
     }
 
@@ -70,6 +84,7 @@ const startGame = () => {
         playerShips.updateShips(p1Gameboard);
         enemyShips.updateShips(p2Gameboard);
         boards = [p1Gameboard, p2Gameboard];
+        p2.clearVariables();
         players = [p1, p2];
         over = false;
         updateMessage(0);

@@ -112,8 +112,19 @@ const createBoard = (board, enemy) => {
         }
         if (orientation == 'right') ship.classList.add('rotate');
     }
+
+    function toggleClickEvents () {
+        let disabled;
+        (cells[0][0].disabled == true) ? disabled = false:
+            disabled = true;
+        for (let i = 0; i < 10 ; i++) {
+            for (let j = 0; j < 10; j++) {
+                cells[i][j].disabled = disabled;
+            }
+        }    
+    }
     
-    return { updateBoard, addDropEvents, createShipDiv }
+    return { updateBoard, addDropEvents, createShipDiv, toggleClickEvents }
 }
 
 const createAliveShips = (div) => {
@@ -151,4 +162,16 @@ const createAliveShips = (div) => {
     return { updateShips }
 }
 
-export { createBoard, createAliveShips }
+function showPassingScreen(num) {
+    let player;
+    (num == 0) ? player = 'One': player = 'Two';
+    let body = document.querySelector('body');
+    let div = addChildElement(body, 'div', '#passing-screen');
+    let h2 = addChildElement(div, 'h1');
+    h2.textContent = `Player ${player}'s Turn`;
+    let p = addChildElement(div, 'p');
+    p.textContent = 'Click to continue';
+    div.addEventListener('click', () => div.remove());
+}
+
+export { createBoard, createAliveShips, showPassingScreen }

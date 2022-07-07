@@ -51,4 +51,4 @@ export { game, playerBoard, enemyBoard, setP1, setP2, p1Gameboard, p2Gameboard,
 
 //add computer smart play
 //add small delay for computer play
-//add two player mode done but add a disable for cancel when change modes
+//setup for second player

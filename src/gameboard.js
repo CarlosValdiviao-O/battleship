@@ -194,8 +194,13 @@ const gameboard = () => {
         return ships[index].direction;
     }
 
+    function shipIsSunk (x, y) {
+        let index = getShipIndex(x, y);
+        return ships[index].isSunk();
+    }
+
     return { placeShip, cells, receiveAttack, ships, areAllSunk, placeShipsRandomly,
-            killShip, getShipOrientation }
+            killShip, getShipOrientation, shipIsSunk }
 }
 
 export { gameboard }

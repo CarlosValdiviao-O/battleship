@@ -1,4 +1,4 @@
-import { createBoard } from "./domStuff";
+import { createBoard, showPassingScreen } from "./domStuff";
 import { addChildElement } from "./functions";
 import { gameboard } from "./gameboard";
 import { game, setP1, setP2, pvp, changeMode } from ".";
@@ -17,6 +17,8 @@ let kill = false;
 let ps = [];
 let domShips = [];
 let cancel;
+let start;
+let counter = 0;
 
 function runSetup () {
     const left = addChildElement(container, 'div', '.left');
@@ -65,16 +67,28 @@ function runSetup () {
     clear.textContent = 'Clear';
     clear.addEventListener('click', clearBoard);
 
-    const start = addChildElement(buttons, 'button');
+    start = addChildElement(buttons, 'button');
     start.textContent = 'Start';
     start.addEventListener('click', newGame);
 
     let mode = addChildElement(buttons, 'button');
     mode.textContent = 'Player Vs. Ai';
     mode.addEventListener('click', () => {
-        (pvp) ? mode.textContent = 'Player Vs. Ai':
+        if (pvp) {
+            mode.textContent = 'Player Vs. Ai';
+            start.textContent = 'Start';
+            start.addEventListener('click', newGame);
+            start.removeEventListener('click', newPvPGame);
+        }
+        else {
             mode.textContent = 'Player Vs. Player';
+            start.textContent = 'Set P1 Board'; 
+            start.removeEventListener('click', newGame);
+            start.addEventListener('click', newPvPGame);
+        }
+            
         changeMode();
+        toggleCancel();
     })
 
     cancel = addChildElement(container, 'button', '.hide');
@@ -169,12 +183,37 @@ function newGame () {
     setP2(computer);
     game.reStart();
     container.classList.toggle('hide');
+    cancel.disabled = false;
 }
 
 function displaySetup () {
     container.classList.toggle('hide');
     clearBoard();
     cancel.classList.remove('hide');
+}
+
+function toggleCancel() {
+    (cancel.disabled == true) ? cancel.disabled = false: cancel.disabled = true;
+}
+
+function newPvPGame() {
+    if (placementBoard.ships.length < 10) return;
+    if (counter == 0) {
+        setP1(placementBoard);
+        counter++;
+        showPassingScreen(1);
+        start.textContent = 'Start';
+    }
+    else {
+        setP2(placementBoard);
+        counter = 0;
+        game.reStart();
+        container.classList.toggle('hide');
+        cancel.disabled = false;
+        showPassingScreen(0);
+        start.textContent = 'Set P1 Board';
+    } 
+    clearBoard();
 }
 
 
