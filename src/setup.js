@@ -1,7 +1,7 @@
 import { createBoard } from "./domStuff";
 import { addChildElement } from "./functions";
 import { gameboard } from "./gameboard";
-import { game, setP1, setP2 } from ".";
+import { game, setP1, setP2, pvp, changeMode } from ".";
 
 const container = document.getElementById('setup');
 let board;
@@ -68,6 +68,14 @@ function runSetup () {
     const start = addChildElement(buttons, 'button');
     start.textContent = 'Start';
     start.addEventListener('click', newGame);
+
+    let mode = addChildElement(buttons, 'button');
+    mode.textContent = 'Player Vs. Ai';
+    mode.addEventListener('click', () => {
+        (pvp) ? mode.textContent = 'Player Vs. Ai':
+            mode.textContent = 'Player Vs. Player';
+        changeMode();
+    })
 
     cancel = addChildElement(container, 'button', '.hide');
     cancel.textContent = 'x';

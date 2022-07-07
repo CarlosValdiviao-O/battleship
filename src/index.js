@@ -4,16 +4,21 @@ import "./style.css";
 import { runSetup } from "./setup";
 import { gameboard } from "./gameboard";
 import { runHud } from "./hud";
+import { player } from "./player";
 
-const player = document.getElementById('player-board');
+const player1 = document.getElementById('player-board');
 const enemy = document.getElementById('enemy-board');
-let playerBoard = createBoard(player, false);
+let playerBoard = createBoard(player1, false);
 let enemyBoard = createBoard(enemy, true);
 let playerShips = createAliveShips(document.getElementById('player-ships'));
 let enemyShips = createAliveShips(document.getElementById('enemy-ships'));
 
 let p1Gameboard = gameboard();
 let p2Gameboard = gameboard();
+
+let p1 = player('Player 1', 'human');
+let p2 = player('Player 2', 'ai');
+let pvp = false;
 
 runSetup();
 let game = startGame();
@@ -28,12 +33,22 @@ function setP2 (board) {
     p2Gameboard = board;
 }
 
+function changeMode () {
+    if (pvp) {
+        pvp = false;
+        p2 = player('Player 2', 'ai');  
+    }  
+    else {
+        pvp = true;
+        p2 = player('Player 2', 'human'); 
+    }
+}
+
 
 export { game, playerBoard, enemyBoard, setP1, setP2, p1Gameboard, p2Gameboard,
-        enemyShips, playerShips }
+        enemyShips, playerShips, p1, p2, pvp, changeMode }
 
 
-//add coordinates and remaining ships to display
 //add computer smart play
 //add small delay for computer play
-//add two player mode
+//add two player mode done but add a disable for cancel when change modes

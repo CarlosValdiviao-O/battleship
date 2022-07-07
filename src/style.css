@@ -48,6 +48,13 @@
     border: 1px solid black;
 }
 
+.coord {
+    border: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #player-board .ship, #enemy-board .ship.hit, #setup .ship, .ships .ship {
     color: red;
     background-color: rgb(97, 97, 97);

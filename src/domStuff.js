@@ -6,16 +6,30 @@ const createBoard = (board, enemy) => {
     let cells = [];
     let x;
     let y;
-    for (let i = 0; i < 10; i++) {
+    let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    for (let i = -1; i < 10; i++) {
         let div = addChildElement(board, 'div', '.row');
-        cells[i] = [];
+        if (i > -1) cells[i] = [];
         for (let j = 0; j < 10; j++) {
-            let cell = addChildElement(div, 'button', '.cell');
-            cell.classList.add('available');
-            cells[i].push(cell);
-            if (enemy) {
-                cell.addEventListener('click', () => game.handleTurn(i, j))
+            if (j == 0) {
+               let letter = addChildElement(div, 'p', '.cell');
+               letter.classList.add('coord');
+               letter.textContent = letters[i]; 
+            }  
+            if (i == -1) {
+               let letter = addChildElement(div, 'p', '.cell');
+               letter.textContent = j + 1;
+               letter.classList.add('coord');
+            } 
+            else {
+               let cell = addChildElement(div, 'button', '.cell');
+                cell.classList.add('available');
+                cells[i].push(cell); 
+                if (enemy) {
+                    cell.addEventListener('click', () => game.handleTurn(i, j))
+                }
             }
+            
         }
     }
 

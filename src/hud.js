@@ -14,10 +14,16 @@ function runHud() {
     restart.addEventListener('click', displaySetup)
 }
 
-function updateMessage () {
-    (message.classList.contains('p1')) ? message.textContent =  `Player Two's Turn`:
+function updateMessage (num) {
+    if (num == 1) {
+        message.textContent =  `Player Two's Turn`;
+        message.classList.remove('p1');
+    }
+    else {
         message.textContent = `Player One's Turn`;
-    message.classList.toggle('p1');
+        message.classList.add('p1');
+    }
+        
 }
 
 export { runHud, updateMessage }
