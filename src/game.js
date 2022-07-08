@@ -1,4 +1,4 @@
-import { updateMessage } from "./hud"
+import { displayWinner, updateMessage } from "./hud"
 import { playerBoard, enemyBoard, p1Gameboard, p2Gameboard, enemyShips, playerShips,
         p1, p2, pvp } from ".";
 import { showPassingScreen } from "./domStuff";
@@ -29,8 +29,10 @@ const startGame = () => {
                     enemyBoard.toggleClickEvents();
                     setTimeout(() => { 
                         changeTurns();
-                        showPassingScreen(currentP);
-                        updateMessage(currentP);
+                        if (!over) {
+                            showPassingScreen(currentP);
+                            updateMessage(currentP);
+                        }                        
                         playerShips.updateShips(boards[currentP]);
                         playerBoard.updateBoard(boards[currentP], false, false);
                         enemyShips.updateShips(boards[currentB]);
@@ -56,6 +58,9 @@ const startGame = () => {
                 updateMessage(currentP);
                 enemyBoard.toggleClickEvents();
             }, 1000)
+        }
+        if (over) {
+            displayWinner(currentB);
         }
     }
 
@@ -84,6 +89,8 @@ const startGame = () => {
         playerShips.updateShips(p1Gameboard);
         enemyShips.updateShips(p2Gameboard);
         boards = [p1Gameboard, p2Gameboard];
+        currentP = 0;
+        currentB = 1;
         p2.clearVariables();
         players = [p1, p2];
         over = false;

@@ -26,6 +26,8 @@ function runSetup () {
     domBoard = createBoard(board, false);
     domBoard.addDropEvents();
     placementBoard = gameboard();
+    let instructions = addChildElement(left, 'p', '#instructions');
+    instructions.textContent = 'Place your ships on the board by dragging them';
 
     const right = addChildElement(container, 'div', '.right');
     const ships = addChildElement(right, 'div', '#drag-ships');
@@ -55,23 +57,23 @@ function runSetup () {
 
     const buttons = addChildElement(right, 'div', '#setting-buttons');
 
-    const random = addChildElement(buttons, 'button');
+    const random = addChildElement(buttons, 'button', '#random');
     random.textContent = 'Random';
     random.addEventListener('click', pickRandom);
 
-    const rotate = addChildElement(buttons, 'button');
+    const rotate = addChildElement(buttons, 'button', '#rotate');
     rotate.textContent = 'Rotate';
     rotate.addEventListener('click', rotateShips);
 
-    const clear = addChildElement(buttons, 'button');
+    const clear = addChildElement(buttons, 'button', '#clear');
     clear.textContent = 'Clear';
     clear.addEventListener('click', clearBoard);
 
-    start = addChildElement(buttons, 'button');
+    start = addChildElement(buttons, 'button', '#start');
     start.textContent = 'Start';
     start.addEventListener('click', newGame);
 
-    let mode = addChildElement(buttons, 'button');
+    let mode = addChildElement(buttons, 'button', '#mode');
     mode.textContent = 'Player Vs. Ai';
     mode.addEventListener('click', () => {
         if (pvp) {
@@ -93,9 +95,10 @@ function runSetup () {
 
     cancel = addChildElement(container, 'button', '.hide');
     cancel.textContent = 'x';
+    cancel.id = 'cancel';
     cancel.addEventListener('click', () => container.classList.toggle('hide'));
 }
-//checkpoint
+
 function placeShip (x, y) {
     if (placementBoard.ships.length >= 10) return;
     placementBoard.placeShip(x, y, orientation, length);
@@ -147,8 +150,8 @@ function pickRandom () {
         placementBoard.ships.forEach(ship => {
             domBoard.createShipDiv(ship.coordinates[0][0], ship.coordinates[0][1], ship.direction, ship.coordinates.length);
         });
-    }, 100);
-    ps.forEach((p) => p.textContent = 0);
+        ps.forEach((p) => p.textContent = 0);
+    }, 500);
     domShips.forEach((ship) => ship.draggable = false);
     remaining = 10;  
 }

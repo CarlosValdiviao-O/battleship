@@ -22,8 +22,18 @@ function updateMessage (num) {
     else {
         message.textContent = `Player One's Turn`;
         message.classList.add('p1');
-    }
-        
+    }       
 }
 
-export { runHud, updateMessage }
+function displayWinner (num) {
+    if (num == 1) {
+        message.textContent =  `Player Two has Won the Match!`;
+        message.classList.remove('p1');
+    }
+    else {
+        message.textContent = `Player One has Won the Match!`;
+        message.classList.add('p1');
+    } 
+}
+
+export { runHud, updateMessage, displayWinner }

@@ -93,6 +93,7 @@ const player = (name, brain) => {
         hit = false;
         secondHit = false;
         tries = [];
+        tries2 = [];
         i = 0;
         foundShip = [];
     }
