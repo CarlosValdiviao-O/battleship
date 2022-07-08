@@ -164,9 +164,10 @@ const createAliveShips = (div) => {
 
 function showPassingScreen(num) {
     let player;
-    (num == 0) ? player = 'One': player = 'Two';
+    (num == 0) ? player = 'One': player = 'Two';    
     let body = document.querySelector('body');
     let div = addChildElement(body, 'div', '#passing-screen');
+    (num == 0) ? div.classList.add('p1'): div.classList.remove('p1')
     let h2 = addChildElement(div, 'h1');
     h2.textContent = `Player ${player}'s Turn`;
     let p = addChildElement(div, 'p');

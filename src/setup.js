@@ -18,6 +18,7 @@ let ps = [];
 let domShips = [];
 let cancel;
 let start;
+let random;
 let counter = 0;
 
 function runSetup () {
@@ -57,7 +58,7 @@ function runSetup () {
 
     const buttons = addChildElement(right, 'div', '#setting-buttons');
 
-    const random = addChildElement(buttons, 'button', '#random');
+    random = addChildElement(buttons, 'button', '#random');
     random.textContent = 'Random';
     random.addEventListener('click', pickRandom);
 
@@ -145,12 +146,14 @@ function saveVariables(ind, len, dra, x, y) {
 function pickRandom () {
     clearBoard();
     placementBoard.placeShipsRandomly();
+    random.disabled = true;
     setTimeout(() => {
         domBoard.updateBoard(placementBoard, false, true);
         placementBoard.ships.forEach(ship => {
             domBoard.createShipDiv(ship.coordinates[0][0], ship.coordinates[0][1], ship.direction, ship.coordinates.length);
         });
         ps.forEach((p) => p.textContent = 0);
+        random.disabled = false;
     }, 500);
     domShips.forEach((ship) => ship.draggable = false);
     remaining = 10;  
