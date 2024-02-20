@@ -1,7 +1,7 @@
 import { createBoard, createAliveShips } from "./domStuff";
 import { startGame } from "./game";
 import "./style.css";
-import { runSetup } from "./setup";
+import { clearBoard, runSetup } from "./setup";
 import { gameboard } from "./gameboard";
 import { runHud } from "./hud";
 import { player } from "./player";
@@ -34,6 +34,8 @@ function setP2 (board) {
 }
 
 function changeMode () {
+    game.reStart();
+    clearBoard();
     if (pvp) {
         pvp = false;
         p2 = player('Player 2', 'ai');  

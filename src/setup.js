@@ -164,7 +164,7 @@ function clearBoard() {
     let ships = Array.from(document.getElementsByClassName('moveable'));
     ships.forEach(ship => ship.remove());
     domBoard.updateBoard(placementBoard, false, true);
-    for (let i = 0; i < ps.length; i ++) ps[i].textContent = 4 - i;
+    for (let i = 0; i < ps.length; i ++) ps[i].textContent = i + 1;
     domShips.forEach(ship => ship.draggable = true);
     remaining = 0;
 }
@@ -182,7 +182,7 @@ function solveOutOfBoundaries () {
 }
 
 function newGame () {
-    if (placementBoard.ships.length < 10) return;
+    if (placementBoard.ships.length < 10 || pvp) return;
     let computer = gameboard();
     computer.placeShipsRandomly();
     setP1(placementBoard);
@@ -203,7 +203,7 @@ function toggleCancel() {
 }
 
 function newPvPGame() {
-    if (placementBoard.ships.length < 10) return;
+    if (placementBoard.ships.length < 10 || !pvp) return;
     if (counter == 0) {
         setP1(placementBoard);
         counter++;
@@ -224,5 +224,5 @@ function newPvPGame() {
 
 
 export { runSetup, placeShip, checkDrag, toggleDrag, saveVariables,
-         solveOutOfBoundaries, displaySetup}
+         solveOutOfBoundaries, displaySetup, clearBoard}
 
